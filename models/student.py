@@ -10,11 +10,12 @@ class Student:
         self.current_courses = []    # Danh sách các khóa học hiện tại
     def update_phone(self, new_phone):
         self.phone = new_phone
-
-    def update_major(self, new_major):
-        self.major = new_major
-
-    # Các phương thức khác để cập nhật thông tin cá nhân
+    def update_dob(self, new_dob):
+        self.dob = new_dob
+    def update_hometown(self, new_hometown):
+        self.hometown = new_hometown
+    def update_name(self, new_name):
+        self.full_name = new_name
     def enroll_course(self, course_id, course_name):
         self.current_courses.append({"Course ID": course_id, "Course Name": course_name})
 

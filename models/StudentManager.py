@@ -1,10 +1,23 @@
-from models.linked_list import DoubleLinkedList
 from models.student import Student
-
+from models.linked_list import DoubleLinkedList
+from utils.data_loader import load_data, write_data
 class StudentManager:
     def __init__(self):
         self.students = DoubleLinkedList()
-
+    def load_students(self, file_path):
+            students_data = load_data(file_path)
+            for student_info in students_data:
+                student = Student(
+                    student_info["Full Name"],
+                    student_info["Student ID"],
+                    student_info["Date of Birth"],
+                    student_info["Hometown"],
+                    student_info["Phone Number"],
+                    student_info["Major"],
+                    student_info.get("Completed Courses", []),
+                    student_info.get("Current Courses", [])
+                )
+                self.students.append(student)
     def add_student(self, full_name, student_id, dob, hometown, phone, major):
         """Create a new student object."""
         new_student = Student(full_name, student_id, dob, hometown, phone, major)
@@ -76,3 +89,22 @@ class StudentManager:
             students.append(current.data)
             current = current.next
         return students
+    def write_students(self, file_path):
+            students_data = []
+            current = self.students.head
+            while current:
+                student = current.data
+                student_info = {
+                    "Full Name": student.full_name,
+                    "Student ID": student.student_id,
+                    "Date of Birth": student.dob,
+                    "Hometown": student.hometown,
+                    "Phone Number": student.phone,
+                    "Major": student.major,
+                    "Completed Courses": student.completed_courses,
+                    "Current Courses": student.current_courses
+                }
+                students_data.append(student_info)
+                current = current.next
+
+            write_data(file_path, students_data)
