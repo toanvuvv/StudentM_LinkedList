@@ -1,0 +1,73 @@
+[
+    {
+        "Full Name": "John Doe",
+        "Student ID": "230001",
+        "Date of Birth": "2001-01-01",
+        "Hometown": "New York",
+        "Phone Number": "1234567890",
+        "Major": "IT1",
+        "Completed Courses": [
+            {"Course ID": "IT101", "Course Name": "Basic ", "Grade": 8},
+            {"Course ID": "IT102", "Course Name": "Database Fundamentals", "Grade": 7.5}
+        ],
+        "Current Courses": [
+            {"Course ID": "IT103", "Course Name": "Advanced Programming"}
+        ]
+    },
+    {
+        "Full Name": "Alice Johnson",
+        "Student ID": "230002",
+        "Date of Birth": "2001-02-15",
+        "Hometown": "Los Angeles",
+        "Phone Number": "2345678901",
+        "Major": "IT2",
+        "Completed Courses": [
+            {"Course ID": "IT201", "Course Name": "Web Development", "Grade": 9}
+        ],
+        "Current Courses": [
+            {"Course ID": "IT202", "Course Name": "UI/UX Design"}
+        ]
+    },
+    {
+        "Full Name": "Michael Smith",
+        "Student ID": "230003",
+        "Date of Birth": "2001-03-20",
+        "Hometown": "Chicago",
+        "Phone Number": "3456789012",
+        "Major": "ITE7",
+        "Completed Courses": [
+            {"Course ID": "ITE701", "Course Name": "Network Security", "Grade": 7}
+        ],
+        "Current Courses": [
+            {"Course ID": "ITE702", "Course Name": "Cybersecurity Fundamentals"}
+        ]
+    },
+    {
+        "Full Name": "Emma Brown",
+        "Student ID": "230004",
+        "Date of Birth": "2001-04-10",
+        "Hometown": "Houston",
+        "Phone Number": "4567890123",
+        "Major": "IT1",
+        "Completed Courses": [
+            {"Course ID": "IT104", "Course Name": "Data Structures", "Grade": 8.5}
+        ],
+        "Current Courses": [
+            {"Course ID": "IT105", "Course Name": "Algorithms"}
+        ]
+    },
+    {
+        "Full Name": "William Davis",
+        "Student ID": "230005",
+        "Date of Birth": "2001-05-05",
+        "Hometown": "Phoenix",
+        "Phone Number": "5678901234",
+        "Major": "IT2",
+        "Completed Courses": [
+            {"Course ID": "IT203", "Course Name": "Software Testing", "Grade": 9}
+        ],
+        "Current Courses": [
+            {"Course ID": "IT204", "Course Name": "Software Project Management"}
+        ]
+    }
+]
