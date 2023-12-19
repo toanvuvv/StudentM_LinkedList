@@ -7,11 +7,22 @@
         "Phone Number": "1234567890",
         "Major": "IT1",
         "Completed Courses": [
-            {"Course ID": "IT101", "Course Name": "Basic ", "Grade": 8},
-            {"Course ID": "IT102", "Course Name": "Database Fundamentals", "Grade": 7.5}
+            {
+                "Course ID": "IT101",
+                "Course Name": "Basic ",
+                "Grade": 8
+            },
+            {
+                "Course ID": "IT102",
+                "Course Name": "Database Fundamentals",
+                "Grade": 7.5
+            }
         ],
         "Current Courses": [
-            {"Course ID": "IT103", "Course Name": "Advanced Programming"}
+            {
+                "Course ID": "IT103",
+                "Course Name": "Advanced Programming"
+            }
         ]
     },
     {
@@ -22,10 +33,17 @@
         "Phone Number": "2345678901",
         "Major": "IT2",
         "Completed Courses": [
-            {"Course ID": "IT201", "Course Name": "Web Development", "Grade": 9}
+            {
+                "Course ID": "IT201",
+                "Course Name": "Web Development",
+                "Grade": 9
+            }
         ],
         "Current Courses": [
-            {"Course ID": "IT202", "Course Name": "UI/UX Design"}
+            {
+                "Course ID": "IT202",
+                "Course Name": "UI/UX Design"
+            }
         ]
     },
     {
@@ -36,10 +54,17 @@
         "Phone Number": "3456789012",
         "Major": "ITE7",
         "Completed Courses": [
-            {"Course ID": "ITE701", "Course Name": "Network Security", "Grade": 7}
+            {
+                "Course ID": "ITE701",
+                "Course Name": "Network Security",
+                "Grade": 7
+            }
         ],
         "Current Courses": [
-            {"Course ID": "ITE702", "Course Name": "Cybersecurity Fundamentals"}
+            {
+                "Course ID": "ITE702",
+                "Course Name": "Cybersecurity Fundamentals"
+            }
         ]
     },
     {
@@ -50,10 +75,17 @@
         "Phone Number": "4567890123",
         "Major": "IT1",
         "Completed Courses": [
-            {"Course ID": "IT104", "Course Name": "Data Structures", "Grade": 8.5}
+            {
+                "Course ID": "IT104",
+                "Course Name": "Data Structures",
+                "Grade": 8.5
+            }
         ],
         "Current Courses": [
-            {"Course ID": "IT105", "Course Name": "Algorithms"}
+            {
+                "Course ID": "IT105",
+                "Course Name": "Algorithms"
+            }
         ]
     },
     {
@@ -64,10 +96,17 @@
         "Phone Number": "5678901234",
         "Major": "IT2",
         "Completed Courses": [
-            {"Course ID": "IT203", "Course Name": "Software Testing", "Grade": 9}
+            {
+                "Course ID": "IT203",
+                "Course Name": "Software Testing",
+                "Grade": 9
+            }
         ],
         "Current Courses": [
-            {"Course ID": "IT204", "Course Name": "Software Project Management"}
+            {
+                "Course ID": "IT204",
+                "Course Name": "Software Project Management"
+            }
         ]
     }
 ]

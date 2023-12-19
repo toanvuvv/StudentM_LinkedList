@@ -1,6 +1,10 @@
 from models.student import Student
 from models.linked_list import DoubleLinkedList
-from utils.data_loader import load_data, write_data
+
+# Trong StudentManager.py
+from utils.data_loader import load_data
+from utils.data_writer import write_data
+
 class StudentManager:
     def __init__(self):
         self.students = DoubleLinkedList()

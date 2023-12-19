@@ -1,13 +1,14 @@
 class Student:
-    def __init__(self, full_name, student_id, dob, hometown, phone, major):
+    def __init__(self, full_name, student_id, dob, hometown, phone, major, completed_courses, current_courses):
         self.full_name = full_name
         self.student_id = student_id
         self.dob = dob
         self.hometown = hometown
         self.phone = phone
         self.major = major
-        self.completed_courses = []  # Danh sách các khóa học đã hoàn thành
-        self.current_courses = []    # Danh sách các khóa học hiện tại
+        self.completed_courses = completed_courses  # Danh sách các khóa học đã hoàn thành
+        self.current_courses = current_courses      # Danh sách các khóa học hiện tại
+
     def update_phone(self, new_phone):
         self.phone = new_phone
     def update_dob(self, new_dob):

@@ -1,4 +1,4 @@
-from models.user import User
+
 from utils.data_loader import load_data
 from utils.data_writer import write_data
 class User:
@@ -12,7 +12,7 @@ class User:
         return self.password == password
 
     def is_admin(self):
-        return self.role == "admin"
+        return self.role == "administrator"
 class UserManager:
     def __init__(self):
         self.users = []
@@ -20,7 +20,7 @@ class UserManager:
     def load_users_from_json(self, file_path):
         users_data = load_data(file_path)
         for user_info in users_data:
-            user = User(user_info["Username"], user_info["Password"], user_info["Role"])
+            user = User(user_info["username"], user_info["password"], user_info["role"])
             self.users.append(user)
     def find_user(self, username):
         for user in self.users:

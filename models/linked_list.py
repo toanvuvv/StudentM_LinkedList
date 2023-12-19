@@ -42,7 +42,7 @@ class DoubleLinkedList:
             current = current.next
         return None
     
-    
+
     def insert(self, data, after_node=None):
         """Insert a new node with the provided data after the specified node.
         If no node is specified, insert at the beginning of the list."""
@@ -63,4 +63,3 @@ class DoubleLinkedList:
             if after_node == self.tail:
                 self.tail = new_node
  
-    # Additional methods like find, insert, etc.
