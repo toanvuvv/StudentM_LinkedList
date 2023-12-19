@@ -1,4 +1,4 @@
-from models.linked_list import DoubleLinkedList
+from models.Double_LinkedList import DoubleLinkedList
 # Trong StudentManager.py
 from utils.data_loader import load_data
 from utils.data_writer import write_data
