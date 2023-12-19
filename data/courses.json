@@ -4,69 +4,79 @@
         "Course Name": "Basic Programming",
         "Tuition Fee": 2000,
         "Description": "Introduction to programming concepts",
-        "Major ID": "IT1"
+        "Major ID": "IT1",
+        "Credit": 3
     },
     {
         "Course ID": "IT102",
         "Course Name": "Database Fundamentals",
         "Tuition Fee": 2500,
         "Description": "Basics of database design and SQL",
-        "Major ID": "IT1"
+        "Major ID": "IT1",
+        "Credit": 3
     },
     {
         "Course ID": "IT103",
         "Course Name": "Advanced Programming",
         "Tuition Fee": 3000,
         "Description": "Advanced topics in programming",
-        "Major ID": "IT1"
+        "Major ID": "IT1",
+        "Credit": 4
     },
     {
         "Course ID": "IT104",
         "Course Name": "Data Structures",
         "Tuition Fee": 2200,
         "Description": "Introduction to data structures",
-        "Major ID": "IT1"
+        "Major ID": "IT1",
+        "Credit": 3
     },
     {
         "Course ID": "IT105",
         "Course Name": "Algorithms",
         "Tuition Fee": 3000,
         "Description": "Fundamentals of algorithms",
-        "Major ID": "IT1"
+        "Major ID": "IT1",
+        "Credit": 4
     },
     {
         "Course ID": "IT201",
         "Course Name": "Web Development",
         "Tuition Fee": 2800,
         "Description": "Designing and developing websites",
-        "Major ID": "IT2"
+        "Major ID": "IT2",
+        "Credit": 3
     },
     {
         "Course ID": "IT202",
         "Course Name": "UI/UX Design",
         "Tuition Fee": 2700,
         "Description": "Fundamentals of user interface and user experience design",
-        "Major ID": "IT2"
+        "Major ID": "IT2",
+        "Credit": 3
     },
     {
         "Course ID": "IT203",
         "Course Name": "Software Testing",
         "Tuition Fee": 2300,
         "Description": "Principles and practices of software testing",
-        "Major ID": "IT2"
+        "Major ID": "IT2",
+        "Credit": 3
     },
     {
         "Course ID": "IT204",
         "Course Name": "Software Project Management",
         "Tuition Fee": 2500,
         "Description": "Techniques and tools for managing software projects",
-        "Major ID": "IT2"
+        "Major ID": "IT2",
+        "Credit": 3
     },
     {
         "Course ID": "ITE701",
         "Course Name": "Network Security",
         "Tuition Fee": 3200,
         "Description": "Protecting computer networks from intrusions",
-        "Major ID": "ITE7"
+        "Major ID": "ITE7",
+        "Credit": 4
     }
 ]
