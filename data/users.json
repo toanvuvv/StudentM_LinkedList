@@ -1,12 +1,12 @@
 [
     {
         "username": "admin",
-        "password": "admin123",  
+        "password": "Z0FBQUFBQmxoXzJxb3hJNFFOdDVDUXNZZ3dhQi1CTG1MLWdPejN4V0JQVGdPMlo0dS1Nc2cwWU85V1pNbjBHczlYb0NvUlNOVkxrOExBZUdRdjFpdW9HMVB1RFcwSnZBbXc9PQ==",
         "role": "administrator"
     },
     {
         "username": "230001",
-        "password": "A",
+        "password": "Z0FBQUFBQmxoXzNHTGpVaGViRXdsbm00anBBamJPWlBXTFBSUkJ1WVhablhmRmJQMHpCaDJWQjNwYTI3eW5Ec2xtQ2hxZjBoeVlpZ24wSzdhQXdwQ1Z3NGh3d2pPclV5UFE9PQ==",
         "role": "student"
     }
 ]

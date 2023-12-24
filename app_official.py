@@ -150,13 +150,13 @@ def show_student_menu():
     return choice
 
 # Functions for admin (include: add, update, delete, show list, show general infomation, find and show detail infomation)
-def add_student(student_manager):
+def add_student(student_manager, users):
     print(colored("Add New Student", "green"))
     full_name = input("Enter full name: ")
     student_id = validate_idnum(input("Enter student ID: "))
     if student_id is None:
         return
-    dob = validate_dob(input("Enter date of birth (DD/MM/YYYY): "))
+    dob = validate_dob(input("Enter date of birth (YYYY/MM/DD): "))
     if dob is None:
         return
     hometown = input("Enter hometown: ")
@@ -165,8 +165,17 @@ def add_student(student_manager):
         return
     major = input("Enter major: ")
 
+    # Thêm student mới
     student_manager.add_student(full_name, student_id, dob, hometown, phone, major)
     print(colored("Student added successfully!", "blue"))
+
+    # Tạo user mới cho student
+    username = student_id
+    password = student_id + "A"  # Tạo password
+    role = "student"  # Đặt role là 'student'
+    users.add_user(username, password, role)  # Thêm user mới
+    print(colored(f"User for student {student_id} created with password {password}", "blue"))
+
 def update_student(student_manager):
     print(colored("Update Student Information", "yellow"))
     student_id = validate_idnum(input("Enter student ID: "))
@@ -190,25 +199,32 @@ def update_student(student_manager):
     # Update the student
     student_manager.update_student(student_id, full_name, dob, hometown, phone, major)
     print(colored("Student updated successfully!", "blue"))
-def delete_student(student_manager):
+def delete_student(student_manager, users):
     print(colored("Delete Student", "red"))
     student_id = validate_idnum(input("Enter student ID to delete: "))
     if student_id is None:
         return
 
-    # Check if the student exists
+    # Kiểm tra xem student có tồn tại không
     student = student_manager.find_student(student_id)
     if not student:
         print(colored("Student not found!", "red"))
         return
 
-    # Confirm deletion
+    # Xác nhận trước khi xoá
     confirm = input("Are you sure you want to delete this student? (y/n): ")
     if confirm.lower() == 'y':
         student_manager.delete_student(student_id)
         print(colored("Student deleted successfully!", "blue"))
+
+        # Xoá user tương ứng
+        if users.delete_user(student_id):
+            print(colored(f"User for student {student_id} also deleted.", "blue"))
+        else:
+            print(colored(f"No user found for student {student_id}.", "yellow"))
     else:
         print(colored("Student deletion cancelled.", "yellow"))
+
 def show_student_list(student_manager):
     students = student_manager.get_all_students()  # Assuming this method exists
     table = PrettyTable()
@@ -344,11 +360,11 @@ def main():
                     while True:
                         choice = show_admin_menu()
                         if choice == "1":
-                            add_student(student_manager)
+                            add_student(student_manager, users)
                         elif choice == "2":
                             update_student(student_manager)
                         elif choice == "3":
-                            delete_student(student_manager)
+                            delete_student(student_manager, users)
                         elif choice == "4":
                             show_student_list(student_manager)
                         elif choice == "5":
