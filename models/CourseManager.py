@@ -1,5 +1,5 @@
 from utils.data_loader import load_data
-
+from utils.data_writer import write_data
 class Course:
     def __init__(self, course_id, course_name, tuition_fee, description, major_id, credit):
         self.course_id = course_id
@@ -46,3 +46,6 @@ class CourseManager:
             if course.course_id == course_id:
                 return course.credit
         return None  # or raise an exception if course not found
+    def save_courses(self, file_path):
+        courses_data = [course.get_course_info() for course in self.courses]
+        write_data(file_path, courses_data)

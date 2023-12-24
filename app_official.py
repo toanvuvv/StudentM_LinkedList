@@ -1,4 +1,5 @@
 # app.py
+import re # Regular expression library
 from models.StudentManager import StudentManager
 from models.User import User, UserManager
 
@@ -24,7 +25,8 @@ users.load_users_from_json("data/users.json")
 #FUNC Calculate student year
 def calculate_student_year(student_id):
     # Assuming the student ID is a string and the first two digits represent the year of enrollment
-    enrollment_year = int(student_id[:2])
+    enrollment_year = int(str(student_id)[:2])
+
     current_year = datetime.now().year % 100  # Get the last two digits of the current year
 
     # Calculate the academic year
@@ -75,30 +77,37 @@ def calculate_tuition_fee(student, course_manager):
 
     
 #NOTE: can viet lai chi tiet hon nhung ham xu ly validate du lieu
+
+
 def validate_idnum(id_num):
-    try:
-        return int(id_num)
-    except ValueError:
-        print("Invalid ID number. Please enter a valid integer.")
+    if re.match(r"^\d{6}$", id_num):
+        return id_num
+    else:
+        print("Invalid ID number. Please enter a valid 6-digit integer.")
         return None
+
 def validate_phone(phone):
-    try:
-        return int(phone)
-    except ValueError:
-        print("Invalid phone number. Please enter a valid integer.")
+    if re.match(r"^\+?\d{1,3}[\s-]?\d{6,10}$", phone):
+        return phone
+    else:
+        print("Invalid phone number. Please enter a valid phone number.")
         return None
+
 def validate_dob(dob):
     try:
-        return int(dob)
+        datetime.strptime(dob, '%Y-%m-%d')
+        return dob
     except ValueError:
-        print("Invalid date of birth. Please enter a valid integer.")
+        print("Invalid date of birth. Please enter a valid date in YYYY-MM-DD format.")
         return None
+
 def validate_choice(choice):
     try:
         return int(choice)
     except ValueError:
         print("Invalid choice. Please enter a valid integer.")
         return None
+
 
 #FUNC Login
 def login(users):
@@ -135,7 +144,8 @@ def show_student_menu():
     print("2. Update student info")
     print("3. Enroll course")
     print("4. Complete course")
-    print("5. Logout")
+    print("5. Change user password")
+    print("6. Logout")
     choice = input("Enter your choice: ")
     return choice
 
@@ -307,7 +317,21 @@ def complete_course(student_manager, logged_in_user):
     # Mark the course as completed
     student_manager.complete_course(student_id, course_id, grade)
     print("Course marked as completed.")
+def change_password(users, logged_in_user):
+    old_password = input("Enter old password: ")
+    new_password = input("Enter new password: ")
+    confirm_password = input("Confirm new password: ")
 
+    if new_password != confirm_password:
+        print("New password and confirm password do not match.")
+        return
+
+    user = users.change_password(logged_in_user.username, old_password, new_password)
+
+    if user:
+        print("Password changed successfully.")
+    else:
+        print("Invalid old password.")
 # Main program logic
 def main():
     while True:
@@ -345,12 +369,14 @@ def main():
                         elif choice == "4":
                             complete_course(student_manager, user)
                         elif choice == "5":
+                            change_password(users, user)
+                        elif choice == "6":
                             break
                         else:
                             print(colored("Invalid choice!", "red"))
         elif choice == "2":
             # Save data
-            student_manager.save_students("data/students.json")
+            student_manager.write_students("data/students.json")
             course_manager.save_courses("data/courses.json")
             users.save_users_to_json("data/users.json")
             break

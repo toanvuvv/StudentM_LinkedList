@@ -31,6 +31,14 @@ class UserManager:
         user = User(username, password, role)
         self.users.append(user)
         return user
+    def change_password(self, username, old_password, new_password):
+        user = self.find_user(username)
+        if not user:
+            return None
+        if not user.check_password(old_password):
+            return None
+        user.password = new_password
+        return user
     def update_user(self, username, password=None, role=None):
         user = self.find_user(username)
         if not user:

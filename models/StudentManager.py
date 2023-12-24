@@ -11,8 +11,8 @@ class Student:
         self.hometown = hometown
         self.phone = phone
         self.major = major
-        self.completed_courses = completed_courses  # Danh sách các khóa học đã hoàn thành
-        self.current_courses = current_courses      # Danh sách các khóa học hiện tại
+        self.completed_courses = completed_courses if completed_courses is not None else []
+        self.current_courses = current_courses if current_courses is not None else []      # Danh sách các khóa học hiện tại
 
     def update_phone(self, new_phone):
         self.phone = new_phone
@@ -63,7 +63,7 @@ class StudentManager:
                 self.students.append(student)
     def add_student(self, full_name, student_id, dob, hometown, phone, major):
         """Create a new student object."""
-        new_student = Student(full_name, student_id, dob, hometown, phone, major)
+        new_student = Student(full_name, student_id, dob, hometown, phone, major, [], [])
         self.students.append(new_student)
         return new_student
 
