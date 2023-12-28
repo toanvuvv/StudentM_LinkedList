@@ -1,7 +1,7 @@
 import base64
 from utils.data_loader import load_data
 from utils.data_writer import write_data
-from utils.encryption_util import encrypt_data
+from utils.encryption_util import encrypt_data , decrypt_data
 class User:
     def __init__(self, username, password, role):
         self.username = username
@@ -19,12 +19,16 @@ class UserManager:
         self.users = []
         self.load_users_from_json("data/users.json")
     def load_users_from_json(self, file_path):
-        users_data = load_data(file_path)
-        for user_info in users_data:
-            # Chuyển đổi chuỗi base64 trở lại thành byte
-            password_decoded = base64.b64decode(user_info["password"].encode('utf-8'))
-            user = User(user_info["username"], password_decoded, user_info["role"])
-            self.users.append(user)
+            users_data = load_data(file_path)
+            for user_info in users_data:
+                # Decode from Base64 and then decrypt
+                password_encoded = user_info["Password"].encode('utf-8')
+                password_decoded = base64.b64decode(password_encoded)
+                password_decrypted = decrypt_data(password_decoded)
+
+                user = User(user_info["Username"], password_decrypted, user_info["Role"])
+                self.users.append(user)
+
     def find_user(self, username):
         for user in self.users:
             if user.username == username:
@@ -72,13 +76,15 @@ class UserManager:
         return user
 
     def save_users_to_json(self, file_path):
-        users_data = []
-        for user in self.users:
-            # Chuyển đổi mật khẩu mã hóa thành chuỗi base64
-            password_encoded = base64.b64encode(user.password).decode('utf-8')
-            users_data.append({
-                "Username": user.username,
-                "Password": password_encoded,
-                "Role": user.role
-            })
-        write_data(file_path, users_data)
+            users_data = []
+            for user in self.users:
+                # Encrypt and then encode to Base64
+                password_encrypted = encrypt_data(user.password)
+                password_encoded = base64.b64encode(password_encrypted).decode('utf-8')
+
+                users_data.append({
+                    "Username": user.username,
+                    "Password": password_encoded,
+                    "Role": user.role
+                })
+            write_data(file_path, users_data)

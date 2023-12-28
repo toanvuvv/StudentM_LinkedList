@@ -1,12 +1,12 @@
 [
     {
-        "username": "admin",
-        "password": "Z0FBQUFBQmxoXzJxb3hJNFFOdDVDUXNZZ3dhQi1CTG1MLWdPejN4V0JQVGdPMlo0dS1Nc2cwWU85V1pNbjBHczlYb0NvUlNOVkxrOExBZUdRdjFpdW9HMVB1RFcwSnZBbXc9PQ==",
-        "role": "administrator"
+        "Username": "admin",
+        "Password": "Z0FBQUFBQmxqYVlMSWpVOXdDdV9jWW04dF9VMFY4cWtkQU1YNVFnTWJBUG9jTUdpMjIzc2J6aWRGVDNtSExJSG1nM2QtS3BlZndXQjd6eFhncE9VMVNvTWx1aGYyMDBkSGc9PQ==",
+        "Role": "administrator"
     },
     {
-        "username": "230001",
-        "password": "Z0FBQUFBQmxoXzNHTGpVaGViRXdsbm00anBBamJPWlBXTFBSUkJ1WVhablhmRmJQMHpCaDJWQjNwYTI3eW5Ec2xtQ2hxZjBoeVlpZ24wSzdhQXdwQ1Z3NGh3d2pPclV5UFE9PQ==",
-        "role": "student"
+        "Username": "230001",
+        "Password": "Z0FBQUFBQmxqYVlqQ0xoaW5KYjF5Mm9NdFRwZGtzdE5LVmtzNW1zemdwYWNWazVhY3Rwcl8xV1JXY0tpQ3hNWmpBZm1UWlpWMzJabTlUcmdqRkc1MXR0bkZtZFR6dFBzckE9PQ==",
+        "Role": "student"
     }
 ]
