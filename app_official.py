@@ -5,7 +5,7 @@ from models.User import User, UserManager
 
 from prettytable import PrettyTable
 from termcolor import colored
-from utils.encryption_util import encrypt_data, decrypt_data
+
 from datetime import datetime
 from models.CourseManager import Course, CourseManager
 
@@ -20,6 +20,15 @@ course_manager.load_courses("data/courses.json")
 # Tải dữ liệu người dùng
 users = UserManager()
 users.load_users_from_json("data/users.json")
+
+
+# Lặp qua danh sách người dùng
+for user in users.users:  # Sử dụng users.users để truy cập vào danh sách người dùng
+    user_info = users.get_user_info(user.username)  # Gọi get_user_info từ UserManager
+    print(user_info)
+
+print(colored("---------------------------------------------", "green"))
+
 
 
 #FUNC Calculate student year
@@ -115,11 +124,21 @@ def login(users):
     password = input("Enter password: ")  # Trong thực tế, mật khẩu nên được nhập một cách an toàn hơn
 
     user = users.find_user(username)
+    get_user_info = users.get_user_info(username)
+    print(get_user_info)
     if user and user.check_password(password):
         return user
     else:
         print("Invalid username or password")
         return None
+    
+
+
+# Lặp qua danh sách người dùng
+for user in users.users:  # Sử dụng users.users để truy cập vào danh sách người dùng
+    user_info = users.get_user_info(user.username)  # Gọi get_user_info từ UserManager
+    print(user_info)
+
 
 #menu logic chuong trinh
 def show_menu():
@@ -236,8 +255,6 @@ def show_student_list(student_manager):
         table.add_row([student.full_name,student.student_id, student.dob, student.phone, year, student.major, gpa])
 
     print(table)
-from prettytable import PrettyTable
-from termcolor import colored
 
 def find_and_show_detailed_information(student_manager, user):
     if user.role == "administrator":
