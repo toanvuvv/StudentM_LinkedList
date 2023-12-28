@@ -1,6 +1,6 @@
 from utils.encryption_util import encrypt_data, decrypt_data
 import base64
-
+from cryptography.fernet import Fernet
 def encrypt_and_encode(password):
     # Mã hóa mật khẩu
     encrypted_password = encrypt_data(password)
