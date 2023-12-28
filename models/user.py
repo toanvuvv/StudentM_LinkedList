@@ -76,15 +76,21 @@ class UserManager:
         return user
 
     def save_users_to_json(self, file_path):
-            users_data = []
-            for user in self.users:
-                # Encrypt and then encode to Base64
-                password_encrypted = encrypt_data(user.password)
-                password_encoded = base64.b64encode(password_encrypted).decode('utf-8')
+        existing_users = load_data(file_path)  # Load existing data
+        updated_users = {user['Username']: user for user in existing_users}  # Convert to dict for easy lookup
 
-                users_data.append({
-                    "Username": user.username,
-                    "Password": password_encoded,
-                    "Role": user.role
-                })
-            write_data(file_path, users_data)
+        for user in self.users:
+            # Encrypt and encode to Base64
+            password_encrypted = encrypt_data(user.password)
+            password_encoded = base64.b64encode(password_encrypted).decode('utf-8')
+
+            # Update or add new user
+            updated_users[user.username] = {
+                "Username": user.username,
+                "Password": password_encoded,
+                "Role": user.role
+            }
+
+        # Convert back to list and write to file
+        users_data = list(updated_users.values())
+        write_data(file_path, users_data)
