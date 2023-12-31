@@ -108,5 +108,26 @@
                 "Course Name": "Software Project Management"
             }
         ]
+    },
+    {
+        "Full Name": "Toan Vu Davis",
+        "Student ID": "230006",
+        "Date of Birth": "2001-05-05",
+        "Hometown": "Phoenix",
+        "Phone Number": "567890121212",
+        "Major": "IT2",
+        "Completed Courses": [
+            {
+                "Course ID": "IT203",
+                "Course Name": "Software Testing",
+                "Grade": 9
+            }
+        ],
+        "Current Courses": [
+            {
+                "Course ID": "IT204",
+                "Course Name": "Software Project Management"
+            }
+        ]
     }
 ]

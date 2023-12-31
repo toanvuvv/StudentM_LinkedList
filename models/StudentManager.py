@@ -86,12 +86,17 @@ class StudentManager:
         return student
 
     def delete_student(self, student_id):
-        """Delete the student from the list."""
         student = self.find_student(student_id)
         if not student:
             return None
-        self.students.remove(student)
+        current = self.students.head
+        while current:
+            if current.data == student:
+                self.students.remove(current)
+                break
+            current = current.next
         return student
+
 
     def enroll_course(self, student_id, course_id, course_name):
         """Enroll the student in a new course."""

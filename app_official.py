@@ -2,6 +2,8 @@
 import re # Regular expression library
 from models.StudentManager import StudentManager
 from models.User import User, UserManager
+import stdiomask
+
 
 from prettytable import PrettyTable
 from termcolor import colored
@@ -9,6 +11,7 @@ from termcolor import colored
 from datetime import datetime
 from models.CourseManager import Course, CourseManager
 
+import getpass
 from utils.calculate import calculate_student_year, calculate_gpa, calculate_tuition_fee
 from utils.exception import validate_idnum, validate_phone, validate_dob, validate_choice
 
@@ -30,41 +33,56 @@ users.load_users_from_json("data/users.json")
 #FUNC Login
 def login(users):
     username = input("Enter username: ")
-    password = input("Enter password: ")  # Trong thực tế, mật khẩu nên được nhập một cách an toàn hơn
-
+    password = stdiomask.getpass("Enter your password: ", mask='*')
+    print(password)
     user = users.find_user(username)
-    get_user_info = users.get_user_info(username)
-    print(get_user_info)
+    # get_user_info = users.get_user_info(username)
+    # print(get_user_info)
     if user and user.check_password(password):
         return user
     else:
         print("Invalid username or password")
         return None
+    
+def print_with_border(text, color_code):
+    border_length = len(text) + 4  # Adjust border length based on text length
+    border_top = color_code + '+' + '-' * (border_length - 2) + '+\033[0m'  # Top border
+    border_middle = color_code + '| ' + text + ' |\033[0m'  # Middle part with text
+    border_bottom = color_code + '+' + '-' * (border_length - 2) + '+\033[0m'  # Bottom border
+
+    print(border_top)
+    print(border_middle)
+    print(border_bottom)
 #menu logic chuong trinh
 def show_menu():
-    print("Welcome to Student Management System")
+    welcome_text = "Welcome to Student Management System"
+    color_code = '\033[94m'  # Blue color
+    print_with_border(welcome_text, color_code)
     print("1. Login")
     print("2. Exit")
     choice = input("Enter your choice: ")
     return choice
 def show_admin_menu():
-    print("Welcome to Admin Panel")
+    welcome_text = "Welcome to Admin Panel"
+    color_code = '\033[92m'  # Green color
+    print_with_border(welcome_text, color_code)
     print("1. Add student")
     print("2. Update student")
     print("3. Delete student")
     print("4. Show student list and general infomation")
     print("5. Find and show student detail infomation")
-    print("6. Logout")
+    print("6. Complete student course")
+    print("7. Logout")
     choice = input("Enter your choice: ")
     return choice
 def show_student_menu():
-    print("Welcome to Student Panel")
-    print("1. Show student info")
+    welcome_text = "Welcome to Student Panel"
+    color_code = '\033[92m'  # Green color
+    print_with_border(welcome_text, color_code)
     print("2. Update student info")
     print("3. Enroll course")
-    print("4. Complete course")
-    print("5. Change user password")
-    print("6. Logout")
+    print("4. Change user password")
+    print("5. Logout")
     choice = input("Enter your choice: ")
     return choice
 
@@ -72,30 +90,32 @@ def show_student_menu():
 def add_student(student_manager, users):
     print(colored("Add New Student", "green"))
     full_name = input("Enter full name: ")
-    student_id = validate_idnum(input("Enter student ID: "))
-    if student_id is None:
-        return
+    
+    # Generate a new student ID
+    existing_students = student_manager.get_all_students()
+    highest_id = max([int(student.student_id) for student in existing_students], default=0)
+    student_id = str(highest_id + 1)
+
     dob = validate_dob(input("Enter date of birth (YYYY/MM/DD): "))
     if dob is None:
         return
     hometown = input("Enter hometown: ")
-    phone = validate_phone(input("Enter phone number: "))
+    phone = validate_phone(input("Enter phone number: "), student_manager)
     if phone is None:
         return
     major = input("Enter major: ")
 
-    # Thêm student mới
-    # student_manager: chua thong tin danh sach tat ca sinh vien
-
+    # Add the new student
     student_manager.add_student(full_name, student_id, dob, hometown, phone, major)
-    print(colored("Student added successfully!", "blue"))
+    print(colored("Student added successfully with ID: " + student_id, "blue"))
 
-    # Tạo user mới cho student
+    # Create a new user for the student
     username = student_id
-    password = student_id + "A"  # Tạo password
-    role = "student"  # Đặt role là 'student'
-    users.add_user(username, password, role)  # Thêm user mới
+    password = student_id + "A"  # Create a password
+    role = "student"  # Set role as 'student'
+    users.add_user(username, password, role)  # Add new user
     print(colored(f"User for student {student_id} created with password {password}", "blue"))
+
 
 def update_student(student_manager):
     print(colored("Update Student Information", "yellow"))
@@ -115,7 +135,7 @@ def update_student(student_manager):
     dob = validate_dob(input("Enter date of birth (DD/MM/YYYY): ")) or student.dob
     hometown = input("Enter hometown: ") or student.hometown
     phone = validate_phone(input("Enter phone number: ")) or student.phone
-    major = input("Enter major: ") or student.major
+    major = student.major
 
     # Update the student
     student_manager.update_student(student_id, full_name, dob, hometown, phone, major)
@@ -201,10 +221,17 @@ def find_and_show_detailed_information(student_manager, user):
     else:
         print(colored("\nNo completed courses available.", "yellow"))
     # Current Courses Table
-    courses_table = PrettyTable()
-    courses_table.field_names = [colored("Course Name", "blue"), colored("Course ID", "blue")]
-    print(colored("\nCurrent Courses:", "green"))
-    print(courses_table)
+    current_courses_table = PrettyTable()
+    current_courses_table.field_names = [colored("Course Name", "blue"), colored("Course ID", "blue")]
+
+    for course in student.current_courses:
+        current_courses_table.add_row([course['Course Name'], course['Course ID']])
+
+    if student.current_courses:
+        print(colored("\nCurrent Courses:", "green"))
+        print(current_courses_table)
+    else:
+        print(colored("\nNo current courses available.", "yellow"))
 # Functions for user (include: show infomation, update infomation, enroll course, complete course)
 def enroll_course(student_manager, course_manager, logged_in_user):
     # Assuming logged_in_user is an instance of the User class
@@ -248,14 +275,13 @@ def complete_course(student_manager, logged_in_user):
     except ValueError:
         print("Invalid grade. Please enter a numeric value.")
         return
-
     # Mark the course as completed
     student_manager.complete_course(student_id, course_id, grade)
     print("Course marked as completed.")
 def change_password(users, logged_in_user):
-    old_password = input("Enter old password: ")
-    new_password = input("Enter new password: ")
-    confirm_password = input("Confirm new password: ")
+    old_password = stdiomask.getpass("Enter old password: ", mask='*')
+    new_password = stdiomask.getpass("Enter new password: ", mask='*')
+    confirm_password = stdiomask.getpass("Confirm new password: ", mask='*')
 
     if new_password != confirm_password:
         print("New password and confirm password do not match.")
@@ -289,6 +315,8 @@ def main():
                         elif choice == "5":
                             find_and_show_detailed_information(student_manager, user)
                         elif choice == "6":
+                            complete_course(student_manager, user)
+                        elif choice == "7":
                             break
                         else:
                             print(colored("Invalid choice!", "red"))
@@ -301,11 +329,10 @@ def main():
                             update_student(student_manager)
                         elif choice == "3":
                             enroll_course(student_manager, course_manager, user)
+                        
                         elif choice == "4":
-                            complete_course(student_manager, user)
-                        elif choice == "5":
                             change_password(users, user)
-                        elif choice == "6":
+                        elif choice == "5":
                             break
                         else:
                             print(colored("Invalid choice!", "red"))

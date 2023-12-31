@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 
 #FUNC Calculate student year
 def calculate_student_year(student_id):
