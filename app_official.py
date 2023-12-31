@@ -9,6 +9,9 @@ from termcolor import colored
 from datetime import datetime
 from models.CourseManager import Course, CourseManager
 
+from utils.calculate import calculate_student_year, calculate_gpa, calculate_tuition_fee
+from utils.exception import validate_idnum, validate_phone, validate_dob, validate_choice
+
 # Khởi tạo và tải dữ liệu sinh viên
 student_manager = StudentManager()
 student_manager.load_students("data/students.json")
@@ -21,101 +24,7 @@ course_manager.load_courses("data/courses.json")
 users = UserManager()
 users.load_users_from_json("data/users.json")
 
-
-# Lặp qua danh sách người dùng
-for user in users.users:  # Sử dụng users.users để truy cập vào danh sách người dùng
-    user_info = users.get_user_info(user.username)  # Gọi get_user_info từ UserManager
-    print(user_info)
-
-print(colored("---------------------------------------------", "green"))
-
-
-
-#FUNC Calculate student year
-def calculate_student_year(student_id):
-    # Assuming the student ID is a string and the first two digits represent the year of enrollment
-    enrollment_year = int(str(student_id)[:2])
-
-    current_year = datetime.now().year % 100  # Get the last two digits of the current year
-
-    # Calculate the academic year
-    academic_year = current_year - enrollment_year + 1
-
-    # Check if the academic year is valid
-    if 1 <= academic_year <= 4:
-        return academic_year
-    else:
-        return "Invalid or graduated"
-#FUNC Calculate the GPA
-def calculate_gpa(completed_courses, course_manager):
-    if not completed_courses:
-        return 0
-
-    total_credits = 0
-    total_score = 0
-
-    for completed_course in completed_courses:
-        course_id = completed_course["Course ID"]
-        course_credit = course_manager.get_course_credit(course_id)
-        course_score = completed_course["Grade"]
-
-        total_credits += course_credit
-        total_score += course_credit * course_score
-
-    if total_credits == 0:
-        return 0
-
-    return round(total_score / total_credits, 2)
-#FUNC Calculate tuition fee
-def calculate_tuition_fee(student, course_manager):
-    total_fee = 0
-
-    # Iterate through the student's current courses
-    for enrolled_course in student.current_courses:
-        course_id = enrolled_course["Course ID"]
-        course = course_manager.get_course_info(course_id)
-
-        if course:
-            # Calculate the fee for this course
-            total_fee += course['Credit'] * course['Tuition Fee']
-        else:
-            print(f"Course with ID {course_id} not found in course database.")
-
-    return total_fee
-
-
-    
-#NOTE: can viet lai chi tiet hon nhung ham xu ly validate du lieu
-
-
-def validate_idnum(id_num):
-    if re.match(r"^\d{6}$", id_num):
-        return id_num
-    else:
-        print("Invalid ID number. Please enter a valid 6-digit integer.")
-        return None
-
-def validate_phone(phone):
-    if re.match(r"^\+?\d{1,3}[\s-]?\d{6,10}$", phone):
-        return phone
-    else:
-        print("Invalid phone number. Please enter a valid phone number.")
-        return None
-
-def validate_dob(dob):
-    try:
-        datetime.strptime(dob, '%Y-%m-%d')
-        return dob
-    except ValueError:
-        print("Invalid date of birth. Please enter a valid date in YYYY-MM-DD format.")
-        return None
-
-def validate_choice(choice):
-    try:
-        return int(choice)
-    except ValueError:
-        print("Invalid choice. Please enter a valid integer.")
-        return None
+#NOTEUtility functions
 
 
 #FUNC Login
@@ -131,15 +40,6 @@ def login(users):
     else:
         print("Invalid username or password")
         return None
-    
-
-
-# Lặp qua danh sách người dùng
-for user in users.users:  # Sử dụng users.users để truy cập vào danh sách người dùng
-    user_info = users.get_user_info(user.username)  # Gọi get_user_info từ UserManager
-    print(user_info)
-
-
 #menu logic chuong trinh
 def show_menu():
     print("Welcome to Student Management System")
@@ -185,6 +85,8 @@ def add_student(student_manager, users):
     major = input("Enter major: ")
 
     # Thêm student mới
+    # student_manager: chua thong tin danh sach tat ca sinh vien
+
     student_manager.add_student(full_name, student_id, dob, hometown, phone, major)
     print(colored("Student added successfully!", "blue"))
 

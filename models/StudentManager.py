@@ -12,18 +12,7 @@ class Student:
         self.phone = phone
         self.major = major
         self.completed_courses = completed_courses if completed_courses is not None else []
-        self.current_courses = current_courses if current_courses is not None else []      # Danh sách các khóa học hiện tại
-
-    def update_phone(self, new_phone):
-        self.phone = new_phone
-    def update_dob(self, new_dob):
-        self.dob = new_dob
-    def update_hometown(self, new_hometown):
-        self.hometown = new_hometown
-    def update_name(self, new_name):
-        self.full_name = new_name
-    def enroll_course(self, course_id, course_name):
-        self.current_courses.append({"Course ID": course_id, "Course Name": course_name})
+        self.current_courses = current_courses if current_courses is not None else []
 
     def complete_course(self, course_id, grade):
         course = next((c for c in self.current_courses if c["Course ID"] == course_id), None)
@@ -31,6 +20,7 @@ class Student:
             course["Grade"] = grade
             self.completed_courses.append(course)
             self.current_courses.remove(course)
+
     def get_student_info(self):
         return {
             "Full Name": self.full_name,
@@ -64,7 +54,9 @@ class StudentManager:
     def add_student(self, full_name, student_id, dob, hometown, phone, major):
         """Create a new student object."""
         new_student = Student(full_name, student_id, dob, hometown, phone, major, [], [])
+        # tao 1 student moi
         self.students.append(new_student)
+        # them vao list students
         return new_student
 
     def find_student(self, student_id):
@@ -132,6 +124,7 @@ class StudentManager:
             students.append(current.data)
             current = current.next
         return students
+    
     def write_students(self, file_path):
             students_data = []
             current = self.students.head
