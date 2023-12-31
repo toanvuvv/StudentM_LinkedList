@@ -22,6 +22,10 @@
             {
                 "Course ID": "IT103",
                 "Course Name": "Advanced Programming"
+            },
+            {
+                "Course ID": "IT101",
+                "Course Name": "Basic Programming"
             }
         ]
     },

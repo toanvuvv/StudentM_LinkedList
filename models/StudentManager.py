@@ -20,6 +20,9 @@ class Student:
             course["Grade"] = grade
             self.completed_courses.append(course)
             self.current_courses.remove(course)
+    def enroll_course(self, course_id, course_name):
+            # Assuming current_courses is a list of dictionaries
+            self.current_courses.append({'Course ID': course_id, 'Course Name': course_name})
 
     def get_student_info(self):
         return {

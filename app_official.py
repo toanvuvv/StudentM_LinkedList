@@ -27,14 +27,14 @@ course_manager.load_courses("data/courses.json")
 users = UserManager()
 users.load_users_from_json("data/users.json")
 
-#NOTEUtility functions
+#NOTE Utility functions
 
 
 #FUNC Login
 def login(users):
     username = input("Enter username: ")
     password = stdiomask.getpass("Enter your password: ", mask='*')
-    print(password)
+    # print(password)
     user = users.find_user(username)
     # get_user_info = users.get_user_info(username)
     # print(get_user_info)
@@ -43,6 +43,7 @@ def login(users):
     else:
         print("Invalid username or password")
         return None
+    
     
 def print_with_border(text, color_code):
     border_length = len(text) + 4  # Adjust border length based on text length
@@ -67,7 +68,7 @@ def show_admin_menu():
     color_code = '\033[92m'  # Green color
     print_with_border(welcome_text, color_code)
     print("1. Add student")
-    print("2. Update student")
+    print("2. Update student info")
     print("3. Delete student")
     print("4. Show student list and general infomation")
     print("5. Find and show student detail infomation")
@@ -79,6 +80,7 @@ def show_student_menu():
     welcome_text = "Welcome to Student Panel"
     color_code = '\033[92m'  # Green color
     print_with_border(welcome_text, color_code)
+    print("1. Show student info")
     print("2. Update student info")
     print("3. Enroll course")
     print("4. Change user password")
@@ -87,6 +89,8 @@ def show_student_menu():
     return choice
 
 # Functions for admin (include: add, update, delete, show list, show general infomation, find and show detail infomation)
+
+
 def add_student(student_manager, users):
     print(colored("Add New Student", "green"))
     full_name = input("Enter full name: ")
@@ -96,9 +100,10 @@ def add_student(student_manager, users):
     highest_id = max([int(student.student_id) for student in existing_students], default=0)
     student_id = str(highest_id + 1)
 
-    dob = validate_dob(input("Enter date of birth (YYYY/MM/DD): "))
-    if dob is None:
-        return
+    dob = None
+    while dob is None:
+        dob = validate_dob(input("Enter date of birth (YYYY/MM/DD): "))
+    
     hometown = input("Enter hometown: ")
     phone = validate_phone(input("Enter phone number: "), student_manager)
     if phone is None:
@@ -117,11 +122,13 @@ def add_student(student_manager, users):
     print(colored(f"User for student {student_id} created with password {password}", "blue"))
 
 
-def update_student(student_manager):
-    print(colored("Update Student Information", "yellow"))
-    student_id = validate_idnum(input("Enter student ID: "))
-    if student_id is None:
-        return
+def update_student(student_manager, logged_in_user=None):
+    if logged_in_user and logged_in_user.role == "student":
+        student_id = logged_in_user.username
+    else:
+        student_id = validate_idnum(input("Enter student ID: "))
+        if student_id is None:
+            return
 
     # Check if the student exists
     student = student_manager.find_student(student_id)
@@ -132,14 +139,23 @@ def update_student(student_manager):
     # Collect new details (leave blank if no change)
     print("Enter new information (leave blank if no change):")
     full_name = input("Enter full name: ") or student.full_name
-    dob = validate_dob(input("Enter date of birth (DD/MM/YYYY): ")) or student.dob
+    
+    dob = None
+    while dob is None:
+        dob_input = input("Enter date of birth (YYYY/MM/DD): ")
+        dob = validate_dob(dob_input)
+
+        
     hometown = input("Enter hometown: ") or student.hometown
-    phone = validate_phone(input("Enter phone number: ")) or student.phone
+    # phone = validate_phone(input("Enter phone number: ")) or student.phone --- sửa lại
+    phone = validate_phone(input("Enter phone number: "), student_manager) or student.phone
     major = student.major
 
     # Update the student
     student_manager.update_student(student_id, full_name, dob, hometown, phone, major)
     print(colored("Student updated successfully!", "blue"))
+    
+    
 def delete_student(student_manager, users):
     print(colored("Delete Student", "red"))
     student_id = validate_idnum(input("Enter student ID to delete: "))
@@ -233,51 +249,80 @@ def find_and_show_detailed_information(student_manager, user):
     else:
         print(colored("\nNo current courses available.", "yellow"))
 # Functions for user (include: show infomation, update infomation, enroll course, complete course)
+
+
 def enroll_course(student_manager, course_manager, logged_in_user):
-    # Assuming logged_in_user is an instance of the User class
     student_id = logged_in_user.username  # Using the username as the student ID
     student = student_manager.find_student(student_id)
 
     if student is None:
-        print("Student not found.")
+        print(colored("Student not found.", "red"))
         return
 
-    course_id = input("Enter course ID: ")
-    course = course_manager.get_course_info(course_id)
+    enrolled_courses = {course['Course ID'] for course in student.current_courses}
+    all_courses = course_manager.courses
+    major_courses = [course for course in all_courses if course.major_id == student.major]
 
-    if course is None:
-        print("Course not found.")
-        return
+    # Create a PrettyTable instance
+    courses_table = PrettyTable()
+    courses_table.field_names = [colored("Course ID", "blue"), colored("Course Name", "blue"), colored("Status", "blue")]
 
-    # Check if the course is part of the student's major
-    if course['Major ID'] != student.major:
-        print("This course is not part of your major.")
-        return
+    for course in major_courses:
+        status = colored("Enrolled", "green") if course.course_id in enrolled_courses else colored("Not Enrolled", "red")
+        courses_table.add_row([course.course_id, course.course_name, status])
 
-    student_manager.enroll_course(student_id, course_id, course['Course Name'])
-    print(f"Student enrolled in course: {course['Course Name']}")
-def complete_course(student_manager, logged_in_user):
-    student_id = logged_in_user.username  # Assuming username is the student ID
+
+    print("\nCourses in your major:")
+    print(courses_table)
+
+    course_id_to_enroll = input("\nEnter Course ID to enroll (or press Enter to skip): ")
+    if course_id_to_enroll:
+        if course_id_to_enroll in enrolled_courses:
+            print(colored("You are already enrolled in this course.", "yellow"))
+        elif course_id_to_enroll not in [course.course_id for course in major_courses]:
+            print(colored("Invalid Course ID or the course is not in your major.", "red"))
+        else:
+            course_to_enroll = next((course for course in major_courses if course.course_id == course_id_to_enroll), None)
+            if course_to_enroll:
+                print(colored("\nCourse Information:", "cyan"))
+                print(f"Course ID: {course_to_enroll.course_id}")
+                print(f"Course Name: {course_to_enroll.course_name}")
+                print(f"Tuition Fee per credit: {course_to_enroll.tuition_fee}")
+                print(f"Description: {course_to_enroll.description}")
+                print(f"Major ID: {course_to_enroll.major_id}")
+                print(f"Credit: {course_to_enroll.credit}")
+
+                confirm = input(colored("Do you want to enroll in this course? (yes/no): ", "green")).lower()
+                if confirm == 'yes':
+                    student_manager.enroll_course(student_id, course_id_to_enroll, course_to_enroll.course_name)
+                    print(colored(f"Enrolled in course: {course_to_enroll.course_name}", "green"))
+                else:
+                    print(colored("Enrollment canceled.", "yellow"))
+            else:
+                print(colored("Course not found.", "red"))
+
+    
+def complete_course(student_manager):
+    student_id = input("Enter student ID: ")
     student = student_manager.find_student(student_id)
-
     if student is None:
         print("Student not found.")
         return
-
     course_id = input("Enter course ID: ")
     # Check if the course is in the student's current courses
     if not any(course['Course ID'] == course_id for course in student.current_courses):
         print("Course not found in your current courses.")
         return
-
     try:
         grade = float(input("Enter your grade for the course: "))
     except ValueError:
         print("Invalid grade. Please enter a numeric value.")
         return
+
     # Mark the course as completed
     student_manager.complete_course(student_id, course_id, grade)
     print("Course marked as completed.")
+
 def change_password(users, logged_in_user):
     old_password = stdiomask.getpass("Enter old password: ", mask='*')
     new_password = stdiomask.getpass("Enter new password: ", mask='*')
@@ -326,10 +371,9 @@ def main():
                         if choice == "1":
                             find_and_show_detailed_information(student_manager, user)
                         elif choice == "2":
-                            update_student(student_manager)
+                            update_student(student_manager, user)
                         elif choice == "3":
                             enroll_course(student_manager, course_manager, user)
-                        
                         elif choice == "4":
                             change_password(users, user)
                         elif choice == "5":

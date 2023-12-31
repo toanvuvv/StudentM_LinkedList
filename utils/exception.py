@@ -1,7 +1,7 @@
 #NOTE: Exception handling
 import re
 from datetime import datetime
-
+from termcolor import colored
 def validate_idnum(id_num):
     if re.match(r"^\d{6}$", id_num):
         return id_num
@@ -25,14 +25,15 @@ def validate_phone(phone, student_manager):
     return phone
 
 
-def validate_dob(dob):
+def validate_dob(date_str):
     try:
-        datetime.strptime(dob, '%Y-%m-%d')
-        return dob
+        # Attempt to parse the input as a date
+        datetime.strptime(date_str, "%Y/%m/%d")
+        return date_str
     except ValueError:
-        print("Invalid date of birth. Please enter a valid date in YYYY-MM-DD format.")
+        print(colored("Invalid date format. Please enter the date in the format YYYY/MM/DD.", "red"))
         return None
-
+    
 def validate_choice(choice):
     try:
         return int(choice)
