@@ -41,14 +41,14 @@
                 "Course ID": "IT201",
                 "Course Name": "Web Development",
                 "Grade": 9
-            }
-        ],
-        "Current Courses": [
+            },
             {
                 "Course ID": "IT202",
-                "Course Name": "UI/UX Design"
+                "Course Name": "UI/UX Design",
+                "Grade": 10.0
             }
-        ]
+        ],
+        "Current Courses": []
     },
     {
         "Full Name": "Michael Smith",

@@ -301,27 +301,44 @@ def enroll_course(student_manager, course_manager, logged_in_user):
             else:
                 print(colored("Course not found.", "red"))
 
+
     
 def complete_course(student_manager):
     student_id = input("Enter student ID: ")
     student = student_manager.find_student(student_id)
+
     if student is None:
-        print("Student not found.")
+        print(colored("Student not found.", "red"))
         return
-    course_id = input("Enter course ID: ")
-    # Check if the course is in the student's current courses
-    if not any(course['Course ID'] == course_id for course in student.current_courses):
-        print("Course not found in your current courses.")
+
+    # Display current courses using PrettyTable
+    current_courses_table = PrettyTable()
+    current_courses_table.field_names = [colored("Course ID", "blue"), colored("Course Name", "blue")]
+
+    for course in student.current_courses:
+        current_courses_table.add_row([course['Course ID'], course['Course Name']])
+
+    if student.current_courses:
+        print(colored("\nCurrent Courses:", "green"))
+        print(current_courses_table)
+    else:
+        print(colored("\nNo current courses available.", "yellow"))
         return
+
+    course_id = input("Enter course ID to complete: ")
+    if course_id not in [course['Course ID'] for course in student.current_courses]:
+        print(colored("Course not found in your current courses.", "red"))
+        return
+
     try:
         grade = float(input("Enter your grade for the course: "))
     except ValueError:
-        print("Invalid grade. Please enter a numeric value.")
+        print(colored("Invalid grade. Please enter a numeric value.", "red"))
         return
 
-    # Mark the course as completed
     student_manager.complete_course(student_id, course_id, grade)
-    print("Course marked as completed.")
+    print(colored("Course marked as completed.", "green"))
+
 
 def change_password(users, logged_in_user):
     old_password = stdiomask.getpass("Enter old password: ", mask='*')
@@ -360,7 +377,7 @@ def main():
                         elif choice == "5":
                             find_and_show_detailed_information(student_manager, user)
                         elif choice == "6":
-                            complete_course(student_manager, user)
+                            complete_course(student_manager)
                         elif choice == "7":
                             break
                         else:
